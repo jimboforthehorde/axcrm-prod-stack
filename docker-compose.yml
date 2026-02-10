@@ -1,0 +1,38 @@
+services:
+  wordpress:
+    image: wordpress:6.5-php8.2
+    container_name: axcrm_wordpress
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: axcrm
+      WORDPRESS_DB_USER: axcrm_user
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - wp_data:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - appnet
+
+  db:
+    image: mariadb:10.11
+    container_name: axcrm_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: axcrm
+      MYSQL_USER: axcrm_user
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - appnet
+
+volumes:
+  wp_data:
+  db_data:
+
+networks:
+  appnet:
+    driver: bridge
