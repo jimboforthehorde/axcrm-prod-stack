@@ -3,15 +3,22 @@ services:
     image: wordpress:6.5-php8.2
     container_name: axcrm_wordpress
     restart: unless-stopped
+
+    ports:
+      - "8080:80"
+      
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: axcrm
       WORDPRESS_DB_USER: axcrm_user
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      
     volumes:
       - wp_data:/var/www/html
+      
     depends_on:
       - db
+      
     networks:
       - appnet
 
